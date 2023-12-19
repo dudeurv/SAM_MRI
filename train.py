@@ -83,7 +83,8 @@ if __name__ == "__main__":
         os.makedirs(snapshot_path)
 
     # Load the model
-    sam, img_embedding_size = sam_model_registry[args.vit_name](checkpoint=args.ckpt)
+    sam = sam_model_registry[args.vit_name](checkpoint=args.ckpt)
+    image_embedding_size = sam.prompt_encoder.image_embedding_size[0]
 
     pkg = import_module(args.module)
     net = pkg.LoRA_Sam(sam, args.rank)  # Removed .cuda()
