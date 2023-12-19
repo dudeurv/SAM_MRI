@@ -16,7 +16,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 from glob import glob
-import imageio.v2 as iio
+import imageio as iio
 from tqdm import tqdm
 from tensorboardX import SummaryWriter
 
