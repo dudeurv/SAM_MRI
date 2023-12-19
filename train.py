@@ -26,7 +26,7 @@ from icecream import ic
 parser = argparse.ArgumentParser()
 parser.add_argument('--root_path', type=str,
                     default='/content/samed_codes/Slices/', help='root dir for data')
-parser.add_argument('--output', type=str, default='/home/sist/kdzhang/results/SAMed_accelerate')
+parser.add_argument('--output', type=str, default='/content/samed_codes/SAMed_accelerate')
 parser.add_argument('--dataset', type=str,
                     default='Synapse', help='experiment_name')
 parser.add_argument('--list_dir', type=str,
