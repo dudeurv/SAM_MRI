@@ -25,7 +25,7 @@ from icecream import ic
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--root_path', type=str,
-                    default='/home/sist/kdzhang/data/train_npz_new_224/', help='root dir for data')
+                    default='/content/samed_codes/Slices/', help='root dir for data')
 parser.add_argument('--output', type=str, default='/home/sist/kdzhang/results/SAMed_accelerate')
 parser.add_argument('--dataset', type=str,
                     default='Synapse', help='experiment_name')
@@ -52,7 +52,7 @@ parser.add_argument('--seed', type=int,
                     default=1234, help='random seed')
 parser.add_argument('--vit_name', type=str,
                     default='vit_h', help='select one vit model')
-parser.add_argument('--ckpt', type=str, default='/home/sist/kdzhang/data/sam_vit_h_4b8939.pth',
+parser.add_argument('--ckpt', type=str, default='/content/samed_codes/sam_vit_h_4b8939.pth',
                     help='Pretrained checkpoint')
 parser.add_argument('--lora_ckpt', type=str, default=None, help='Finetuned lora checkpoint')
 parser.add_argument('--rank', type=int, default=4, help='Rank for LoRA adaptation')
