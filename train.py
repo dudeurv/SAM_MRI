@@ -11,7 +11,7 @@ from importlib import import_module
 from sam_lora_image_encoder import LoRA_Sam
 from segment_anything import sam_model_registry
 
-from trainer import trainer_synapse
+from trainer import trainer_BraTS
 from icecream import ic
 
 parser = argparse.ArgumentParser()
