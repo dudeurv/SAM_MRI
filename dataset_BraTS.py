@@ -52,34 +52,32 @@ class RandomGenerator(object):
         sample = {'image': image, 'label': label.long(), 'low_res_label': low_res_label.long()}
         return sample
 
+def normalise_intensity(image, ROI_thres=0.1):
+    pixel_thres = np.percentile(image, ROI_thres)
+    ROI = np.where(image > pixel_thres, image, 0) # If image value is greater than pixel threshold, return image value, otherwise return 0
+    mean = np.mean(ROI)
+    std = np.std(ROI)
+    ROI_norm = (ROI - mean) / (std + 1e-8) # Normalise ROI
+    return ROI_norm
 
-class BraTS_dataset(Dataset):
-    def __init__(self, base_dir, list_dir, split, transform=None):
-        self.transform = transform  # using transform in torch!
-        self.split = split
-        self.sample_list = open(os.path.join(list_dir, self.split+'.txt')).readlines()
-        self.data_dir = base_dir
+def map_labels(label):
+    label_map = {0: 0, 85: 1, 170: 2, 255: 3}
+    mapped_label = label.copy()
+    for k, v in label_map.items():
+        mapped_label[label == k] = v
+    return mapped_label
+
+class BratsDataset(Dataset):
+    def __init__(self, root):
+        self.img_path_all = glob(root + '/BraTS-GLI-t1c/*.png')
+        self.mask_path_all = [img_path.replace('t1c', 'seg') for img_path in self.img_path_all]
 
     def __len__(self):
-        return len(self.sample_list)
+      return len(self.img_path_all)
 
-    def __getitem__(self, idx):
-        if self.split == "train":
-            slice_name = self.sample_list[idx].strip('\n')
-            data_path = os.path.join(self.data_dir, slice_name+'.npz')
-            data = np.load(data_path)
-            image, label = data['image'], data['label']
-        else:
-            vol_name = self.sample_list[idx].strip('\n')
-            filepath = self.data_dir + "/{}.npy.h5".format(vol_name)
-            data = h5py.File(filepath)
-            image, label = data['image'][:], data['label'][:]
-
-        # Input dim should be consistent
-        # Since the channel dimension of nature image is 3, that of medical image should also be 3
-
-        sample = {'image': image, 'label': label}
-        if self.transform:
-            sample = self.transform(sample)
-        sample['case_name'] = self.sample_list[idx].strip('\n')
-        return sample
+    def __getitem__(self, index):
+        image = iio.imread(self.img_path_all[index])
+        image = normalise_intensity(image)
+        label = iio.imread(self.mask_path_all[index])
+        label = map_labels(label)
+        return image, label
