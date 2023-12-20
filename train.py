@@ -16,7 +16,7 @@ from icecream import ic
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--root_path', type=str,
-                    default='/home/sist/kdzhang/data/train_npz_new_224/', help='root dir for data')
+                    default='/home/sist/kdzhang/data/BraTS-GLI-t1c/', help='root dir for data')
 parser.add_argument('--output', type=str, default='/home/sist/kdzhang/results/SAMed_accelerate')
 parser.add_argument('--dataset', type=str,
                     default='Synapse', help='experiment_name')
