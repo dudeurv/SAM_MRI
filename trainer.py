@@ -37,16 +37,14 @@ def trainer_BraTS(args, model, snapshot_path, multimask_output, low_res):
     num_classes = args.num_classes
     batch_size = args.batch_size * args.n_gpu
     # max_iterations = args.max_iterations
-    db_train = BraTS_dataset(base_dir=args.root_path, list_dir=args.list_dir, split="train",
-                               transform=transforms.Compose(
-                                   [RandomGenerator(output_size=[args.img_size, args.img_size], low_res=[low_res, low_res])]))
+    db_train = BraTS_dataset(base_dir=args.root_path)
     print("The length of train set is: {}".format(len(db_train)))
 
     def worker_init_fn(worker_id):
         random.seed(args.seed + worker_id)
-
-    trainloader = DataLoader(db_train, batch_size=batch_size, shuffle=True, num_workers=8, pin_memory=True,
-                             worker_init_fn=worker_init_fn)
+        
+    trainloader = DataLoader(db_train, batch_size=25, shuffle=True, num_workers=2)
+    
     if args.n_gpu > 1:
         model = nn.DataParallel(model)
     model.train()
